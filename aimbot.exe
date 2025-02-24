@@ -1,0 +1,73 @@
+import cv2
+import numpy as np
+import pyautogui
+import time
+
+def find_target(frame, target_color_lower, target_color_upper):
+    try:
+        # Convert the frame to HSV color space
+        hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        
+        # Create a mask for the target color
+        mask = cv2.inRange(hsv_frame, target_color_lower, target_color_upper)
+        
+        # Find contours of the target
+        contours, _ = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        
+        if contours:
+            # Get the largest contour
+            largest_contour = max(contours, key=cv2.contourArea)
+            x, y, w, h = cv2.boundingRect(largest_contour)
+            return (x + w // 2, y + h // 2)  # Return the center of the target
+        else:
+            return None
+    except Exception as e:
+        print(f"Error in find_target: {e}")
+        return None
+
+def aim_at_target(target_position):
+    try:
+        if target_position:
+            screen_width, screen_height = pyautogui.size()
+            # Calculate the screen position to move the mouse
+            pyautogui.moveTo(target_position[0] * screen_width / 1920, target_position[1] * screen_height / 1080)
+    except Exception as e:
+        print(f"Error in aim_at_target: {e}")
+
+def main():
+    # Define the target color range in HSV
+    target_color_lower = np.array([100, 150, 0])  # Example lower bound for blue
+    target_color_upper = np.array([140, 255, 255])  # Example upper bound for blue
+
+    # Start capturing video from the screen
+    cap = cv2.VideoCapture(0)  # Change to appropriate source if needed
+
+    if not cap.isOpened():
+        print("Error: Could not open video source.")
+        return
+
+    try:
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                print("Error: Failed to capture frame.")
+                break
+
+            target_position = find_target(frame, target_color_lower, target_color_upper)
+            aim_at_target(target_position)
+
+            # Display the frame (for debugging purposes)
+            cv2.imshow('Frame', frame)
+
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+    except KeyboardInterrupt:
+        print("Program terminated by user.")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+    finally:
+        cap.release()
+        cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+    main()

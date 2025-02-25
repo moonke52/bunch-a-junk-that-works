@@ -1,65 +1,94 @@
 import tkinter as tk
 from tkinter import messagebox
+import ctypes
+import time
 
-class AimbotApp:
-    def __init__(self, master):
-        self.master = master
-        master.title("Fortnite Aimbot")
+# Constants for the game process
+GAME_PROCESS_NAME = "FortniteClient-Win64-Shipping_BE.exe"
 
-        self.label = tk.Label(master, text="Fortnite Aimbot Control Panel")
-        self.label.pack()
+# Function to find the game process
+def find_game_process():
+    try:
+        # Simulated process finding logic
+        # In a real scenario, you would use a library like psutil to find the process
+        print(f"Finding process: {GAME_PROCESS_NAME}")
+        # Simulate process found
+        return True
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to find game process: {str(e)}")
+        return False
 
-        self.see_through_walls = tk.BooleanVar()
-        self.see_through_walls_check = tk.Checkbutton(master, text="See Players Through Walls", variable=self.see_through_walls)
-        self.see_through_walls_check.pack()
+# Function to toggle aimbot
+def toggle_aimbot():
+    try:
+        # Simulated aimbot toggle logic
+        print("Aimbot toggled.")
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to toggle aimbot: {str(e)}")
 
-        self.flight_mode = tk.BooleanVar()
-        self.flight_mode_check = tk.Checkbutton(master, text="Enable Flight Mode", variable=self.flight_mode)
-        self.flight_mode_check.pack()
+# Function to enable flight mode
+def enable_flight_mode():
+    try:
+        # Simulated flight mode logic
+        print("Flight mode enabled.")
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to enable flight mode: {str(e)}")
 
-        self.noclip_mode = tk.BooleanVar()
-        self.noclip_mode_check = tk.Checkbutton(master, text="Enable Noclip", variable=self.noclip_mode)
-        self.noclip_mode_check.pack()
+# Function to enable noclip
+def enable_noclip():
+    try:
+        # Simulated noclip logic
+        print("Noclip enabled.")
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to enable noclip: {str(e)}")
 
-        self.aimbot_strength_label = tk.Label(master, text="Aimbot Strength (1-100):")
-        self.aimbot_strength_label.pack()
-        self.aimbot_strength = tk.Scale(master, from_=1, to=100, orient=tk.HORIZONTAL)
-        self.aimbot_strength.pack()
+# Function to adjust aimbot strength
+def adjust_aimbot_strength(value):
+    try:
+        # Simulated aimbot strength adjustment logic
+        print(f"Aimbot strength set to: {value}")
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to adjust aimbot strength: {str(e)}")
 
-        self.flight_speed_label = tk.Label(master, text="Flight Speed (1-100):")
-        self.flight_speed_label.pack()
-        self.flight_speed = tk.Scale(master, from_=1, to=100, orient=tk.HORIZONTAL)
-        self.flight_speed.pack()
+# Function to increase movement speed
+def increase_movement_speed(value):
+    try:
+        # Simulated movement speed adjustment logic
+        print(f"Movement speed set to: {value}")
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to increase movement speed: {str(e)}")
 
-        self.start_button = tk.Button(master, text="Start Aimbot", command=self.start_aimbot)
-        self.start_button.pack()
+# GUI setup
+def setup_gui():
+    root = tk.Tk()
+    root.title("Fortnite Aimbot")
 
-        self.stop_button = tk.Button(master, text="Stop Aimbot", command=self.stop_aimbot)
-        self.stop_button.pack()
+    # Aimbot toggle button
+    aimbot_button = tk.Button(root, text="Toggle Aimbot", command=toggle_aimbot)
+    aimbot_button.pack(pady=10)
 
-    def start_aimbot(self):
-        try:
-            # Here you would implement the logic to start the aimbot
-            if self.see_through_walls.get():
-                print("Seeing players through walls enabled.")
-            if self.flight_mode.get():
-                print("Flight mode enabled.")
-            if self.noclip_mode.get():
-                print("Noclip mode enabled.")
-            print(f"Aimbot strength set to: {self.aimbot_strength.get()}")
-            print(f"Flight speed set to: {self.flight_speed.get()}")
-            messagebox.showinfo("Aimbot Status", "Aimbot started successfully.")
-        except Exception as e:
-            messagebox.showerror("Error", f"An error occurred while starting the aimbot: {str(e)}")
+    # Flight mode button
+    flight_button = tk.Button(root, text="Enable Flight Mode", command=enable_flight_mode)
+    flight_button.pack(pady=10)
 
-    def stop_aimbot(self):
-        try:
-            # Logic to stop the aimbot
-            messagebox.showinfo("Aimbot Status", "Aimbot stopped successfully.")
-        except Exception as e:
-            messagebox.showerror("Error", f"An error occurred while stopping the aimbot: {str(e)}")
+    # Noclip button
+    noclip_button = tk.Button(root, text="Enable Noclip", command=enable_noclip)
+    noclip_button.pack(pady=10)
+
+    # Aimbot strength slider
+    strength_slider = tk.Scale(root, from_=1, to=100, orient=tk.HORIZONTAL, label="Aimbot Strength", command=adjust_aimbot_strength)
+    strength_slider.pack(pady=10)
+
+    # Movement speed slider
+    speed_slider = tk.Scale(root, from_=1, to=100, orient=tk.HORIZONTAL, label="Movement Speed", command=increase_movement_speed)
+    speed_slider.pack(pady=10)
+
+    # Start the GUI
+    root.mainloop()
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    aimbot_app = AimbotApp(root)
-    root.mainloop()
+    if find_game_process():
+        setup_gui()
+    else:
+        print("Game process not found. Exiting.")
+
